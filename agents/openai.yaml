@@ -1,0 +1,4 @@
+interface:
+  display_name: "MixUI"
+  short_description: "Polished component UI and 3D composition"
+  default_prompt: "Use $mixui to choose component systems, design priority layouts, integrate motion, overlays, and 3D components, and verify the result."

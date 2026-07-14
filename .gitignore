@@ -1,0 +1,8 @@
+# Skill files only — no build artifacts
+node_modules/
+.DS_Store
+*.log
+
+# Local overrides
+.env
+.env.local
