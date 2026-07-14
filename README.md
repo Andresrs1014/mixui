@@ -18,28 +18,91 @@ code is written.
   an executable self-prompt with a no-hallucination clause, and presents a
   spec to the user for sign-off before any code is written.
 
+The skill format is the same regardless of agent: a directory with
+`SKILL.md` (and optional `references/`, `examples/`, `scripts/`,
+`agents/`) at the root. The agent reads `SKILL.md` on demand.
+
+## Supported agents
+
+| Agent | Install path | Format |
+| --- | --- | --- |
+| **Mavis / MiniMax** | `~/.mavis/skills/<name>/` | `SKILL.md` with frontmatter |
+| **Claude Code** | `~/.claude/skills/<name>/` | `SKILL.md` with frontmatter |
+| **Codex CLI** | `~/.codex/skills/<name>/` | `SKILL.md` with frontmatter |
+| **OpenCode** | `~/.config/opencode/skills/<name>/` | `SKILL.md` with frontmatter |
+| **Cursor** | `~/.cursor/skills/<name>/` (global) or `.cursor/skills/<name>/` (per-project) | `SKILL.md` + `agents/openai.yaml` |
+| **Gemini CLI** | `~/.gemini/extensions/<name>/` | see [Gemini CLI extensions docs](https://github.com/google-gemini/gemini-cli) — note this is an "extension", not a "skill" verbatim; the SKILL.md body still works as the system prompt. |
+| **Aider** | not a skill system; point Aider's `--read` flag at `SKILL.md` per session |
+
+If your agent is not listed, the format is the same: a directory whose
+root is `SKILL.md` with a YAML frontmatter (`name`, `description`). Most
+modern coding agents recognize that pattern. If your agent uses a
+different convention, copy `SKILL.md` into the location your agent
+expects.
+
 ## Install
 
-The skill ships as a directory whose root is `SKILL.md`. To install in
-Mavis:
+Pick your agent. Each command installs the skill so the next session of
+that agent sees `mixui` in its available skills.
+
+### Mavis / MiniMax
 
 ```bash
-git clone https://github.com/YOUR-USER/mixui.git ~/.mavis/skills/mixui
+git clone https://github.com/Andresrs1014/mixui.git ~/.mavis/skills/mixui
 ```
 
-The next Mavis session will see `mixui` in the available skills. No
-runtime restart required.
+(If `~/.mavis` is a reparse point to `~/.minimax`, the same directory is
+also at `~/.minimax/skills/mixui/`.)
 
-To update later:
+### Claude Code
 
 ```bash
-cd ~/.mavis/skills/mixui && git pull
+git clone https://github.com/Andresrs1014/mixui.git ~/.claude/skills/mixui
 ```
+
+### Codex CLI
+
+```bash
+git clone https://github.com/Andresrs1014/mixui.git ~/.codex/skills/mixui
+```
+
+### OpenCode
+
+```bash
+git clone https://github.com/Andresrs1014/mixui.git ~/.config/opencode/skills/mixui
+```
+
+### Cursor (global)
+
+```bash
+git clone https://github.com/Andresrs1014/mixui.git ~/.cursor/skills/mixui
+```
+
+Cursor additionally reads `agents/openai.yaml` from this repo, which sets
+the display name and default prompt for the skill in the Cursor UI.
+
+### Aider (per session)
+
+```bash
+aider --read https://raw.githubusercontent.com/Andresrs1014/mixui/main/SKILL.md
+```
+
+Aider has no persistent skill system; pass the SKILL.md as context per
+session.
+
+## Update
+
+```bash
+cd <install-path>/mixui && git pull
+```
+
+The next session of your agent picks up the new version — no restart
+required for any of the agents above.
 
 ## What is in the box
 
 ```
-SKILL.md                                # the entry point
+SKILL.md                                # entry point, read by all agents
 agents/openai.yaml                      # Cursor / OpenAI-style agent config
 references/
   mixui-playbook.md                     # full UI build method
